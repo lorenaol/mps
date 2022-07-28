@@ -114,3 +114,9 @@
   font-family: "Lucida Console", "Courier New", monospace;
   /*margin-top: 50px;*/
 }
+.neg {
+  background-color: black;
+  color: white;
+  height: 10000px;
+  width: 100%;
+ }

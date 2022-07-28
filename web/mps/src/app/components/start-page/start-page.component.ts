@@ -63,6 +63,7 @@ export class StartPageComponent implements OnInit {
      let user = JSON.parse(localStorage.getItem('user')!);
       user.type = "SPECTATOR";
     this.roomService.updateUser(user).subscribe((data:any)=> {
+      if(room.players?.indexOf(JSON.parse(localStorage.getItem("user")!)._id) == -1) {
         room.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
 
         room.score?.push(0);
@@ -71,20 +72,31 @@ export class StartPageComponent implements OnInit {
           localStorage.setItem("room", JSON.stringify(room));
           this.router.navigate(['/room', room.name]);
         });
+      } else {
+        localStorage.setItem("room", JSON.stringify(room));
+        this.router.navigate(['/room', room.name]);
+      }
+
       });
 
 
   }
 
   clickPlayer(room: Room): void {
-        room.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
-        room.score?.push(0);
-    room.currentNo =   room.currentNo! + 1;
-       console.log(JSON.parse(localStorage.getItem("user")!)._id)
-        this.roomService.updateRoom(room).subscribe(()=> {
-          localStorage.setItem("room", JSON.stringify(room));
-          this.router.navigate(['/room', room.name]);
-        });
+    if(room.players?.indexOf(JSON.parse(localStorage.getItem("user")!)._id) == -1) {
+      room.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
+      room.score?.push(0);
+      room.currentNo =   room.currentNo! + 1;
+      console.log(JSON.parse(localStorage.getItem("user")!)._id)
+      this.roomService.updateRoom(room).subscribe(()=> {
+        localStorage.setItem("room", JSON.stringify(room));
+        this.router.navigate(['/room', room.name]);
+      });
+    } else {
+      localStorage.setItem("room", JSON.stringify(room));
+      this.router.navigate(['/room', room.name]);
+    }
+
   }
 
   clickNewRoom(): void {

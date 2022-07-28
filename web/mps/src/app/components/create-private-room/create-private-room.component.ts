@@ -42,15 +42,18 @@ export class CreatePrivateRoomComponent implements OnInit {
     room.pass = this.privateRoomForm.value.password;
     this.service.getRoom(room).subscribe((res: any) => {
       let room2 = res.body;
-      room2.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
-      room2.score?.push(0);
-      room2.currentNo =   room2.currentNo + 1;
-      this.service.updateRoom(room2).subscribe(()=> {
+      if(room2.players.indexOf(JSON.parse(localStorage.getItem("user")!)._id) == -1) {
+        room2.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
+        room2.score?.push(0);
+        room2.currentNo =   room2.currentNo + 1;
+        this.service.updateRoom(room2).subscribe(()=> {
+          localStorage.setItem("room", JSON.stringify(room2));
+          this.router.navigate(['/room', room2.name]);
+        });
+      } else {
         localStorage.setItem("room", JSON.stringify(room2));
         this.router.navigate(['/room', room2.name]);
-      });
-
-
+      }
     });
   }
 
@@ -71,14 +74,20 @@ export class CreatePrivateRoomComponent implements OnInit {
       let user = JSON.parse(localStorage.getItem('user')!);
       user.type = "SPECTATOR";
       this.service.updateUser(user).subscribe((data:any)=> {
-        room2.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
+        if(room2.players.indexOf(JSON.parse(localStorage.getItem("user")!)._id) == -1) {
+          room2.players?.push(JSON.parse(localStorage.getItem("user")!)._id);
 
-        room2.score?.push(0);
-        room2.audienceNo  = room2.audienceNo! + 1;
-        this.service.updateRoom(room2).subscribe(()=> {
+          room2.score?.push(0);
+          room2.audienceNo  = room2.audienceNo! + 1;
+          this.service.updateRoom(room2).subscribe(()=> {
+            localStorage.setItem("room", JSON.stringify(room2));
+            this.router.navigate(['/room', room2.name])
+          });
+        }else {
           localStorage.setItem("room", JSON.stringify(room2));
-          this.router.navigate(['/room', room2.name])
-        });
+          this.router.navigate(['/room', room2.name]);
+        }
+
       });
 
 

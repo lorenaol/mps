@@ -119,7 +119,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
   exit() : void {
     let room;
-    if(!localStorage.getItem("room")) {
+    if(localStorage.getItem("room")!== undefined) {
       this.roomService.getRoomByName(this.router.url.split('/')[2]).subscribe((data:any) => {
         room = data.body;
         let user = JSON.parse(localStorage.getItem("user")!)._id;
@@ -136,7 +136,7 @@ export class RoomComponent implements OnInit, OnDestroy {
             }
           })
         }
-        localStorage.removeItem("room");
+        // localStorage.removeItem("room");
         this.router.navigate(['/start']);
       })
     } else {
@@ -156,7 +156,7 @@ export class RoomComponent implements OnInit, OnDestroy {
           }
         })
       }
-      localStorage.removeItem("room");
+      // localStorage.removeItem("room");
       this.router.navigate(['/start']);
     }
 

@@ -52,7 +52,7 @@ export class NewRoomComponent implements OnInit {
     console.log(room.type)
     this.roomService.addRoom(room).subscribe((data:any) => {
      // localStorage.setItem("room",data.body )
-      localStorage.removeItem("room");
+     //  localStorage.removeItem("room");
       this.router.navigate(['/room', room.name]);
     });
   }
